@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>가이드 에디터</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="editor-layout">
+      <aside class="editor-sidebar">
+        <button type="button" id="site-config-button" class="editor-sidebar__site-config">사이트 설정</button>
+        <div class="editor-sidebar__pages">
+          <button type="button" id="new-page-button">새 페이지</button>
+          <ul id="page-list"></ul>
+        </div>
+        <div class="editor-sidebar__variables">
+          <h2 class="editor-sidebar__heading">변수</h2>
+          <form id="variable-form">
+            <input type="text" id="variable-key-input" placeholder="키 (예: 등록일)" />
+            <input type="text" id="variable-value-input" placeholder="값 (예: 2026-08-15)" />
+            <button type="submit">변수 추가</button>
+          </form>
+          <ul id="variable-list"></ul>
+        </div>
+      </aside>
+      <main class="editor-main">
+        <p id="editor-hint">왼쪽 목록에서 페이지를 선택하거나 "새 페이지"를 눌러주세요.</p>
+        <label>제목 <input type="text" id="page-title" placeholder="페이지를 선택하거나 새로 만들어주세요" /></label>
+        <label>설명 <textarea id="page-description" rows="3"></textarea></label>
+        <div id="toolbar">
+          <button type="button" data-snippet="h2">중제목</button>
+          <button type="button" data-snippet="h3">소제목</button>
+          <button type="button" data-snippet="notice">공지</button>
+          <button type="button" data-snippet="warning">주의</button>
+          <button type="button" data-snippet="calendar">캘린더</button>
+          <button type="button" id="page-link-button">페이지 링크</button>
+          <button type="button" id="image-button">이미지</button>
+          <button type="button" id="attachment-button">첨부파일</button>
+        </div>
+        <textarea id="page-body" rows="20"></textarea>
+        <button type="button" id="save-button">저장</button>
+      </main>
+    </div>
+    <dialog id="site-config-dialog">
+      <form id="site-config-form">
+        <h2>사이트 설정</h2>
+        <label>기관명 <input type="text" id="config-org-name" /></label>
+        <label>기본 색상 <input type="color" id="config-color-primary" /></label>
+        <label>보조 색상 <input type="color" id="config-color-secondary" /></label>
+        <label>강조 색상 <input type="color" id="config-color-accent" /></label>
+        <label>로고 경로 <input type="text" id="config-logo-path" placeholder="/assets/logo.svg" /></label>
+        <div class="site-config-dialog__actions">
+          <button type="button" id="site-config-cancel">취소</button>
+          <button type="submit">저장</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

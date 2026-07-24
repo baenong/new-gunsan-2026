@@ -1,0 +1,40 @@
+{
+  "name": "gov-guide-kit",
+  "description": "공공기관용 KRDS 스타일 민원 안내 사이트 템플릿 (Astro 기반, 로컬 GUI 에디터 포함)",
+  "license": "MIT",
+  "keywords": [
+    "krds",
+    "astro",
+    "government",
+    "template",
+    "boilerplate"
+  ],
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "tsx scripts/check-contrast.ts && astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:links": "linkinator dist --recurse",
+    "editor": "node editor/server.mjs"
+  },
+  "dependencies": {
+    "astro": "^4.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "jsdom": "^24.1.0",
+    "linkinator": "^8.0.2",
+    "rehype-stringify": "^10.0.0",
+    "remark-directive": "^3.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0",
+    "vitest": "^4.1.10",
+    "zod": "^3.23.0"
+  }
+}
