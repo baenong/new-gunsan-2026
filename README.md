@@ -1,6 +1,25 @@
-# gov-guide-kit
+<p align="center">
+  <img src="./.github/assets/brightness.svg" width="128">
+</p>
 
-공공기관이 복사해서 쓰는 재사용 가능한 안내 사이트 템플릿입니다. 로그인·검색·백엔드 없이, 마크다운(또는 GUI 에디터)으로 작성한 콘텐츠를 KRDS 스타일의 정적 사이트로 자동 변환해 Vercel, GitHub Pages, GitLab Pages 중 원하는 곳에 배포합니다.
+<hr>
+
+<h1 align="center">gov-guide-kit</h1>
+
+<p align="center">
+  <i>코드 한 줄 몰라도, 공공기관 민원 안내 사이트를 만듭니다</i>
+  <br>
+  <br>공공기관이 복사해서 쓰는 재사용 가능한 안내 사이트 템플릿입니다.
+  <br>로그인·검색·백엔드 없이, 마크다운(또는 GUI 에디터)으로 작성한 콘텐츠를 KRDS 스타일의 정적 사이트로 자동 변환해 배포합니다.
+</p>
+
+<p align="center">
+  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-4-BC52EE.svg?logo=astro&logoColor=white" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.5-3178C6.svg?logo=typescript&logoColor=white" /></a>
+  <img src="https://img.shields.io/badge/Node-20-339933.svg?logo=node.js&logoColor=white" />
+  <a href="https://vitest.dev/"><img src="https://img.shields.io/badge/Vitest-tested-6E9F18.svg?logo=vitest&logoColor=white" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" /></a>
+</p>
 
 ## 전체 흐름 한눈에 보기
 
@@ -117,8 +136,11 @@ GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아
    :::calendar
    - 2026-08-15: 임용등록 마감
    - 2026-08-20: 서류 제출
+   - 2026-08-24~2026-08-28: 하계휴가
    :::
    ```
+
+   `날짜~날짜: 제목` 형식으로 쓰면 여러 날에 걸친 일정(기간 일정)이 되며, 캘린더에서 해당 날짜들에 걸쳐 하나로 이어진 막대로 표시됩니다.
 
 4. 다른 페이지로 링크: `[임용등록 안내](/guide/registration)`
 5. 첨부파일(hwp/pdf 등)은 일반 링크로 씁니다. 자동으로 다운로드 카드로 바뀝니다.
@@ -163,6 +185,10 @@ npm run build       # 정적 빌드 (front matter/색상 대비 오류가 있으
 npm run test        # 단위 테스트
 npm run test:links  # 빌드 산출물의 깨진 링크 검사
 ```
+
+## 향후 계획
+
+- 자유롭게 작성한 글(정형화되지 않은 텍스트)을 AI가 자동으로 이 프로젝트의 마크다운 형식(front matter, `:::notice`/`:::calendar` 등)으로 변환해주는 기능을 추가할 예정입니다. 비개발자가 문법을 전혀 몰라도, 편하게 쓴 글만으로 페이지를 만들 수 있게 하는 것이 목표입니다.
 
 ## 라이선스
 
