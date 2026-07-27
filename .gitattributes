@@ -1,0 +1,4 @@
+src/content/** merge=ours
+public/assets/** merge=ours
+site.config.json merge=ours
+site.variables.json merge=ours
