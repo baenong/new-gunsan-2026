@@ -21,14 +21,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - run: npm ci
+          node-version: 22
+      - run: npm install
       - run: npm run test
       - env:
           DEPLOY_TARGET: github-pages
           GITHUB_PAGES_BASE: /${{ github.event.repository.name }}
         run: npm run build
-      - run: npm run test:links
+      - env:
+          DEPLOY_TARGET: github-pages
+          GITHUB_PAGES_BASE: /${{ github.event.repository.name }}
+        run: npm run test:links
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

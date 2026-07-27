@@ -16,7 +16,7 @@
     "build": "tsx scripts/check-contrast.ts && astro build",
     "preview": "astro preview",
     "test": "vitest run",
-    "test:links": "linkinator dist --recurse",
+    "test:links": "node scripts/check-links.mjs",
     "editor": "node editor/server.mjs"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "jsdom": "^24.1.0",
     "linkinator": "^8.0.2",
     "rehype-stringify": "^10.0.0",
+    "remark-breaks": "^4.0.0",
     "remark-directive": "^3.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.0",
