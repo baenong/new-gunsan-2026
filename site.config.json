@@ -1,9 +1,10 @@
 {
   "orgName": "전북특별자치도 군산시",
   "colors": {
-    "primary": "#1A2D65",
-    "secondary": "#018FD7",
-    "accent": "#7AC38E"
+    "primary": "#1a2d65",
+    "secondary": "#018fd7",
+    "accent": "#7ac38e"
   },
-  "logoPath": "/assets/logo.svg"
+  "logoPath": "/assets/logo.svg",
+  "logoBackground": true
 }
