@@ -18,9 +18,67 @@ export function isValidVariableKey(key) {
   return typeof key === 'string' && key.trim().length > 0 && !key.includes('{{') && !key.includes('}}') && !key.includes('\n');
 }
 
+export function previewUrlFor(slug, previewPort) {
+  if (!previewPort) return null;
+  const path = slug === 'index' ? '/' : `/guide/${slug}`;
+  return `http://localhost:${previewPort}${path}`;
+}
+
+export function computeDeviceScale(panelWidth, intrinsicWidth) {
+  if (panelWidth <= 0) return 1;
+  return Math.min(1, panelWidth / intrinsicWidth);
+}
+
+const PREVIEW_DEVICE_SIZES = {
+  desktop: { width: 1280, height: 720 },
+  mobile: { width: 360, height: 800 },
+};
+
+let previewMode = 'full';
+
+function applyPreviewMode() {
+  const device = document.getElementById('preview-device');
+  const frame = document.getElementById('preview-frame');
+
+  if (previewMode === 'full') {
+    device.style.width = '';
+    device.style.height = '';
+    frame.style.width = '';
+    frame.style.height = '';
+    frame.style.transform = '';
+    return;
+  }
+
+  const size = PREVIEW_DEVICE_SIZES[previewMode];
+  const panelWidth = document.getElementById('preview-viewport').clientWidth;
+  const scale = computeDeviceScale(panelWidth, size.width);
+
+  device.style.width = `${size.width * scale}px`;
+  device.style.height = `${size.height * scale}px`;
+  frame.style.width = `${size.width}px`;
+  frame.style.height = `${size.height}px`;
+  frame.style.transform = `scale(${scale})`;
+}
+
+function wirePreviewModeButtons() {
+  const buttons = document.querySelectorAll('[data-preview-mode]');
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      previewMode = button.dataset.previewMode;
+      buttons.forEach((b) => b.classList.toggle('is-active', b === button));
+      applyPreviewMode();
+    });
+  });
+
+  new ResizeObserver(() => applyPreviewMode()).observe(
+    document.getElementById('preview-viewport'),
+  );
+}
+
 let currentSlug = null;
 let cachedPages = [];
 let cachedVariables = {};
+let previewPort = null;
 
 function renderPageList(pages) {
   cachedPages = pages;
@@ -90,6 +148,15 @@ function setEditingEnabled(enabled) {
   document.getElementById('editor-hint').style.display = enabled ? 'none' : 'block';
 }
 
+async function refreshPreviewPort() {
+  const { port } = await api.getPreviewPort();
+  if (port) {
+    previewPort = port;
+    return;
+  }
+  setTimeout(refreshPreviewPort, 500);
+}
+
 function clearEditor() {
   currentSlug = null;
   document.getElementById('page-title').value = '';
@@ -106,6 +173,10 @@ async function loadPage(slug) {
   document.getElementById('page-body').value = page.body;
   setEditingEnabled(true);
   renderPageList(cachedPages);
+  const url = previewUrlFor(slug, previewPort);
+  if (url) {
+    document.getElementById('preview-frame').src = url;
+  }
 }
 
 async function saveCurrentPage() {
@@ -116,6 +187,10 @@ async function saveCurrentPage() {
     body: document.getElementById('page-body').value,
   });
   await refreshPageList();
+  const frame = document.getElementById('preview-frame');
+  if (frame.src) {
+    frame.src = frame.src;
+  }
 }
 
 async function createNewPage() {
@@ -385,6 +460,7 @@ function wireStaticControls() {
   wirePageLinkButton();
   wireColorButtons();
   wireTableDialog();
+  wirePreviewModeButtons();
   wireUploadButtons();
   wireVariableForm();
   wireSiteConfigDialog();
@@ -395,6 +471,7 @@ async function init() {
   setEditingEnabled(false);
   await refreshPageList();
   await refreshVariables();
+  refreshPreviewPort();
 }
 
 if (typeof document !== 'undefined' && document.getElementById('page-list')) {
