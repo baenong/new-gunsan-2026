@@ -32,6 +32,18 @@ PROTECTED_PATH_PREFIXES=(
   "site.variables.json"
 )
 
+# 템플릿에 새로 추가된 "예시" 콘텐츠 파일 목록. 새로 이 템플릿을
+# 복제한 프로젝트에는 처음부터 포함되어 있지만(파일 자체가 저장소에
+# 커밋되어 있으므로), 이미 운영 중인 다운스트림 프로젝트가 이후에
+# update-from-template을 실행했을 때는 자동으로 끼워 넣지 않는다.
+# src/content/의 merge=ours 보호는 "양쪽에 이미 있는 파일"의 충돌만
+# 막아주고, 로컬에 전혀 없던 새 파일의 "추가"는 막지 못하기 때문에
+# 여기서 별도로 걸러낸다. 예시가 필요한 다운스트림 저장소는 템플릿
+# 저장소에서 직접 복사해 쓰면 된다.
+NEW_EXAMPLE_ONLY_PATHS=(
+  "src/content/guide/harness-engineering.md"
+)
+
 log() { printf '\n[update-from-template] %s\n' "$1"; }
 fail() { printf '\n[update-from-template] 오류: %s\n' "$1" >&2; exit 1; }
 
@@ -176,6 +188,24 @@ if [ "$MERGE_FAILED" -eq 1 ]; then
 
   git commit --no-edit
   log "콘텐츠/설정 파일의 삭제 상태를 유지한 채 병합을 마무리했습니다."
+fi
+
+# 병합 전(HEAD^1, 병합 커밋의 첫 부모)에 이미 있던 경로가 아니라면
+# "이번 병합으로 새로 추가된 예시 파일"로 보고 제거한다. HEAD^1은
+# 최초 병합/일반 병합 모두에서 "병합 직전 로컬 상태"를 가리키므로
+# 두 경우 모두에서 정확하게 동작한다. 이미 로컬에 있었거나(예: 템플릿
+# 생성 시점에 이미 포함됨) 예외 처리로 지운 뒤 그대로인 경우는
+# 건드리지 않는다.
+REMOVED_EXAMPLE=0
+for path in "${NEW_EXAMPLE_ONLY_PATHS[@]}"; do
+  if [ -e "$path" ] && ! git cat-file -e "HEAD^1:$path" 2>/dev/null; then
+    log "  - $path: 템플릿에 새로 추가된 예시 콘텐츠라 기존 프로젝트에는 자동으로 넣지 않습니다."
+    git rm -q -- "$path"
+    REMOVED_EXAMPLE=1
+  fi
+done
+if [ "$REMOVED_EXAMPLE" -eq 1 ]; then
+  git commit --amend --no-edit
 fi
 
 log "병합 완료. 의존성을 다시 설치하고 테스트를 실행합니다."
